@@ -106,3 +106,24 @@ and dea.date =  vac.date
 where dea.continent is not null
 
 select * from PercentPopulationVaccinated;
+
+-- we take there not as they are not inluded in the above quaries and want to stay consistant
+-- European Union is part of europe 
+select location, SUM(cast(new_deaths as int)) as TotalDeathCount
+from CovidDeaths
+Where continent is null
+and location not in ('World','European Union','international')
+Group by location
+order by TotalDeathCount Desc;
+
+--by country infected by population
+select location,Population,MAX(total_cases) as HighestInfectionCount,Max(total_cases/population)*100 as PercentPopulationInfected
+from CovidDeaths
+group by location,Population
+order by PercentPopulationInfected desc;
+
+Select Location, Population,date, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+From CovidDeaths
+--Where location like '%states%'
+Group by Location, Population, date
+order by PercentPopulationInfected desc;
